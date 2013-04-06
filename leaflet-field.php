@@ -22,9 +22,10 @@ class acf_field_leaflet extends acf_field
         $this->label = __('Leaflet Map');
         $this->category = __('Content','acf');
         $this->defaults = array(
-            'center' => '48.856614,2.3522219000000177',
-            'zoom' => 2,
-            'api_key' => false
+            'lat'           => '55.606',
+            'lng'           => '13.002',
+            'zoom_level'    => 13,
+            'api_key'       => false
         );
         
         
@@ -129,7 +130,7 @@ class acf_field_leaflet extends acf_field
                     do_action('acf/create_field', array(
                         'type'  => 'number',
                         'name'  => 'fields['.$key.'][zoom_level]',
-                        'value' => ( isset( $field['zoom_level'] ) ) ? $field['zoom_level'] : '13'
+                        'value' => $field['zoom_level']
                     ));
                     ?>
                 </td>
@@ -145,7 +146,7 @@ class acf_field_leaflet extends acf_field
                     do_action('acf/create_field', array(
                         'type'  => 'number',
                         'name'  => 'fields['.$key.'][lat]',
-                        'value' => ( isset( $field['lat'] ) ) ? $field['lat'] : '55.606'
+                        'value' => $field['lat']
                     ));
                     ?>
                 </td>
@@ -161,7 +162,7 @@ class acf_field_leaflet extends acf_field
                     do_action('acf/create_field', array(
                         'type'      => 'number',
                         'name'      => 'fields['.$key.'][lng]',
-                        'value'     => ( isset( $field['lng'] ) ) ? $field['lng'] : '13.002'
+                        'value'     => $field['lng']
                     ));
                     ?>
                 </td>
