@@ -2,12 +2,12 @@
 
 /*
     Plugin Name: Advanced Custom Fields: Leaflet field
-    Plugin URI: https://github.com/jensjns/
-    Description: Adds a Leaflet field to Advanced Custom Fields. This field allows you to show maps with markers, polygons and paths and popups.
+    Plugin URI: https://github.com/jensjns/acf-leaflet-field/
+    Description: Adds a Leaflet field to the  Advanced Custom Fields plugin.
     Version: 1.0.0
     Author: Jens Nilsson
-    Author URI: http://jensnilsson.nu
-    License: GPL
+    Author URI: http://jensnilsson.nu/
+    License: 
 */
 
 class acf_field_leaflet_plugin
