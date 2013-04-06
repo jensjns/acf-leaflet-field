@@ -8,6 +8,12 @@ jQuery(document).ready(function($) {
     function render_leaflet_map() {
         var map_settings = {};
 
+        var value = {
+            markers:[]
+        };
+
+        var field = $('#' + leaflet_field.id);
+
         if( typeof leaflet_field.lat != 'undefined' ) {
             map_settings.lat = leaflet_field.lat;
         }
@@ -40,10 +46,20 @@ jQuery(document).ready(function($) {
             maxZoom: 18
         }).addTo(map);
 
+        if( field.val.length > 0 ) {
+            var test = JSON.parse(field.val());
+            
+            $.each(test.markers, function(index, marker){
+                L.marker(marker, {draggable: true}).addTo(map);
+                value.markers.push(marker);
+            });
+        }
 
         map.on('click', function(e){
-            var marker = L.marker(e.latlng).addTo(map);
-            console.log(e.latlng);
+            var marker = L.marker(e.latlng, {draggable: true}).addTo(map);
+            value.markers.push(e.latlng);
+
+            field.val(JSON.stringify(value));
         });
     }
 

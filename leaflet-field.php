@@ -187,16 +187,17 @@ class acf_field_leaflet extends acf_field
     {
         // defaults
         $field = array_merge($this->defaults, $field);
-        //error_log(print_r( $field, true));
-        wp_localize_script( 'leaflet-field', 'leaflet_field', $field );
 
         // Build an unique id based on ACF's one.
         $pattern = array('/\[/', '/\]/');
         $replace = array('_', '');
         $uid = preg_replace($pattern, $replace, $field['name']);
+        $field['id'] = 'leaflet_' . $uid;
+
+        wp_localize_script( 'leaflet-field', 'leaflet_field', $field );
 
         ?>
-            <input type="hidden" value="<?php echo $field['value']; ?>" id="leaflet_<?php echo $uid; ?>" name="<?php echo $field['name']; ?>"/>
+            <input type="hidden" value='<?php echo $field['value']; ?>' id="leaflet_<?php echo $uid; ?>" name="<?php echo $field['name']; ?>"/>
             <div class="leaflet-map">
                 <div id="map" style="height:350px;" data-uid="leaflet_map_<?php echo $uid; ?>"></div>
             </div>
