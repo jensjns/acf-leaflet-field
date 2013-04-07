@@ -7,7 +7,7 @@
     Version: Not working
     Author: Jens Nilsson
     Author URI: http://jensnilsson.nu/
-    License: 
+    License: GPLv2
 */
 
 class acf_field_leaflet_plugin
