@@ -13,7 +13,6 @@ jQuery(document).ready(function($) {
         // check if we have a saved value
         if( field.val().length > 0 ) {
             map_settings = JSON.parse(field.val());
-            console.log(map_settings);
         }
         else {
             map_settings = {
@@ -22,7 +21,7 @@ jQuery(document).ready(function($) {
                     lat:null,
                     lng:null
                 },
-                markers:[]
+                markers:{}
             };
         }
 
@@ -55,12 +54,18 @@ jQuery(document).ready(function($) {
             maxZoom: 18
         }).addTo(map);
 
-        // render existing markers
-        if( map_settings.markers.length > 0 ) {
-            $.each(map_settings.markers, function(index, marker){
-                var marker = L.marker([marker.lat, marker.lng], {draggable: true});
-                add_marker(marker);
+        // render existing markers if we have any
+        if( Object.keys(map_settings.markers).length > 0 ) {
+            var newMarkers = {};
+            $.each(map_settings.markers, function(index, marker) {
+                var newMarker = L.marker([marker.coords.lat, marker.coords.lng], {draggable: true});
+                index = add_marker(newMarker);
+                marker.id = index;
+                newMarkers['m_' + index] = marker;
             });
+
+            map_settings.markers = newMarkers;
+            update_field();
         }
 
         map.on('click', function(e){
@@ -69,14 +74,17 @@ jQuery(document).ready(function($) {
             if( active_tool.hasClass('tool-marker') ) {
                 // the marker-tool is currently being used
                 var marker = L.marker(e.latlng, {draggable: true});
-
-                map_settings.markers.splice( add_marker( marker ), 0, e.latlng);
+                index = add_marker( marker );
+                map_settings.markers['m_' + index] = {coords:e.latlng};
+                map_settings.markers['m_' + index].id = index;
             }
 
             update_field();
         }).on('zoomend', function(e){
+            // the map was zoomed
             update_field();
         }).on('dragend', function(e){
+            // the map was dragged
             update_field();
         });
 
@@ -87,9 +95,19 @@ jQuery(document).ready(function($) {
                 active_tool = $('.tools .tool.active');
 
                 if( active_tool.hasClass('tool-remove') ) {
-                    map_settings.markers.splice(marker._leaflet_id);
+                    delete map_settings.markers['m_' + e.target._leaflet_id];
                     map.removeLayer(marker);
                 }
+                else if( active_tool.hasClass('tool-tag') ) {
+                    marker.bindPopup('Tjena');
+                }
+
+                update_field();
+            }).on('dragend', function(e) {
+                newLatLng = e.target.getLatLng();
+                map_settings.markers['m_' + e.target._leaflet_id].coords.lat = newLatLng.lat;
+                map_settings.markers['m_' + e.target._leaflet_id].coords.lng = newLatLng.lng;
+                update_field();
             });
 
             // return the id of this marker
@@ -108,8 +126,14 @@ jQuery(document).ready(function($) {
 
 
     $(document).on('click', '.leaflet-map .tools .tool', function(e){
-        $('.leaflet-map .tools .active').removeClass('active');
-        $(this).addClass('active');
+
+        if( $(this).hasClass('tool-reset') ) {
+            // TODO: Clear map and the field-value
+        }
+        else {
+            $('.leaflet-map .tools .active').removeClass('active');
+            $(this).addClass('active');
+        }
     });
 
 });

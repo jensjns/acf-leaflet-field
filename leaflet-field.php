@@ -202,10 +202,10 @@ class acf_field_leaflet extends acf_field
                 <ul class="tools">
                     <!--<li class="tool tool-compass icon-compass"></li>-->
                     <li class="tool tool-marker icon-location active"></li>
-                    <li class="tool tool-tag icon-comment-alt2-fill"></li>
+                    <!--<li class="tool tool-tag icon-comment-alt2-fill"></li>-->
                     <!--<li class="tool tool-path icon-share"></li>-->
                     <li class="tool tool-remove icon-cancel-circle red"></li>
-                    <li class="tool tool-reset icon-reload right red"></li>
+                    <!--<li class="tool tool-reset icon-reload right red"></li>-->
                 </ul>
                 <div id="map" style="height:350px;" data-uid="leaflet_map_<?php echo $uid; ?>"></div>
             </div>

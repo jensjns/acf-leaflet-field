@@ -30,6 +30,6 @@ class acf_field_leaflet_plugin
 
 }
 
-new acf_field_leaflet_plugin();       
+new acf_field_leaflet_plugin();
 
 ?>
