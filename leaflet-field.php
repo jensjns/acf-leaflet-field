@@ -67,15 +67,15 @@ class acf_field_leaflet extends acf_field
     function input_admin_head()
     {
         // styles
-        wp_enqueue_style( 'leaflet', plugins_url( '/js/leaflet/dist/leaflet.css', __FILE__ ), array(), '0.5.1', 'all' );
-        wp_enqueue_style( 'leaflet-ie', plugins_url( '/js/leaflet/dist/leaflet.ie.css', __FILE__ ), array( 'leaflet' ), '0.5.1' );
+        wp_enqueue_style( 'leaflet', plugins_url( '/js/leaflet/leaflet.css', __FILE__ ), array(), '0.5.1', 'all' );
+        wp_enqueue_style( 'leaflet-ie', plugins_url( '/js/leaflet/leaflet.ie.css', __FILE__ ), array( 'leaflet' ), '0.5.1' );
         $GLOBALS['wp_styles']->add_data( 'leaflet-ie', 'conditional', 'lte IE 8' );
         wp_enqueue_style( 'icomoon', plugins_url( '/css/icomoon/style.css', __FILE__ ), array(), '1.0.0', 'all' );
         wp_enqueue_style( 'leaflet-field', plugins_url( '/css/leaflet-field.css', __FILE__ ), array( 'leaflet', 'icomoon' ), '1.0.0', 'all' );
 
         // scripts
         wp_enqueue_script( 'jquery' );
-        wp_enqueue_script( 'leaflet', plugins_url( '/js/leaflet/dist/leaflet.js', __FILE__ ), array(), '0.5.1', true );
+        wp_enqueue_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.5.1', true );
         wp_enqueue_script( 'leaflet-field', plugins_url( '/js/leaflet-field.js', __FILE__ ), array( 'jquery', 'leaflet' ), '1.0.0', true );
     }
     
@@ -205,7 +205,7 @@ class acf_field_leaflet extends acf_field
                     <li class="tool tool-tag icon-comment-alt2-fill"></li>
                     <!--<li class="tool tool-path icon-share"></li>-->
                     <li class="tool tool-remove icon-cancel-circle red"></li>
-                    <li class="tool tool-reset icon-reload right"></li>
+                    <li class="tool tool-reset icon-reload right red"></li>
                 </ul>
                 <div id="map" style="height:350px;" data-uid="leaflet_map_<?php echo $uid; ?>"></div>
             </div>
