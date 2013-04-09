@@ -37,10 +37,10 @@ The first 500k tiles you load with your API-key will be free. Please refer to [c
 
 == Changelog ==
 
-= 1.0 =
+= 0.1 =
 * Release
 
 == Upgrade Notice ==
 
-= 1.0 =
+= 0.1 =
 * Release
