@@ -13,7 +13,7 @@ Addon for Advanced Custom Fields that adds a Leaflet field to the available fiel
 == Description ==
 
 This plugin adds a leaflet field to the [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/) plugin.
-The field itself is a leaflet-map which you can add markers to.
+Currently the field only supports markers.
 
 == Installation ==
 
@@ -26,6 +26,12 @@ The field itself is a leaflet-map which you can add markers to.
 
 == Instructions ==
 To render a map all you have to do is use `the_leaflet_field( $field_name );` where you want to render the map.
+
+== To do ==
+1. Popups that can be added to each marker.
+1. Support for drawing polylines.
+1. Support for alternative tile-providers including your own tiles.
+1. Support for alternative marker-icons.
 
 == GitHub ==
 
