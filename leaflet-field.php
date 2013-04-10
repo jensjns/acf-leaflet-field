@@ -25,7 +25,8 @@ class acf_field_leaflet extends acf_field
             'lat'           => '55.606',
             'lng'           => '13.002',
             'zoom_level'    => 13,
-            'api_key'       => false
+            'height'        => 350,
+            'api_key'       => ''
         );
         
         
@@ -71,12 +72,14 @@ class acf_field_leaflet extends acf_field
         wp_enqueue_style( 'leaflet-ie', plugins_url( '/js/leaflet/leaflet.ie.css', __FILE__ ), array( 'leaflet' ), '0.5.1' );
         $GLOBALS['wp_styles']->add_data( 'leaflet-ie', 'conditional', 'lte IE 8' );
         wp_enqueue_style( 'icomoon', plugins_url( '/css/icomoon/style.css', __FILE__ ), array(), '1.0.0', 'all' );
-        wp_enqueue_style( 'leaflet-field', plugins_url( '/css/leaflet-field.css', __FILE__ ), array( 'leaflet', 'icomoon' ), '1.0.0', 'all' );
+        wp_enqueue_style( 'leaflet-field', plugins_url( '/css/leaflet-field.css', __FILE__ ), array( 'leaflet', 'icomoon' ), '1', 'all' );
 
         // scripts
         wp_enqueue_script( 'jquery' );
-        wp_enqueue_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.5.1', true );
-        wp_enqueue_script( 'leaflet-field', plugins_url( '/js/leaflet-field.js', __FILE__ ), array( 'jquery', 'leaflet' ), '1.0.0', true );
+        wp_register_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.5.1', true );
+        wp_register_script( 'leaflet-field', plugins_url( '/js/leaflet-field.js', __FILE__ ), array( 'jquery', 'leaflet' ), '1', true );
+        wp_enqueue_script( 'leaflet' );
+        wp_enqueue_script( 'leaflet-field' );
     }
     
     
@@ -167,6 +170,22 @@ class acf_field_leaflet extends acf_field
                     ?>
                 </td>
             </tr>
+
+            <tr class="field_option field_option_<?php echo $this->name; ?>">
+                <td class="label">
+                    <label><?php _e('Height','acf-leaflet-field'); ?></label>
+                    <p class="description"><?php _e('The map needs a specified height to be rendered correctly.','acf-leaflet-field'); ?></p>
+                </td>
+                <td>
+                    <?php
+                    do_action('acf/create_field', array(
+                        'type'      => 'number',
+                        'name'      => 'fields['.$key.'][height]',
+                        'value'     => $field['height']
+                    ));
+                    ?>
+                </td>
+            </tr>
         <?php
     }
     
@@ -192,6 +211,7 @@ class acf_field_leaflet extends acf_field
         $pattern = array('/\[/', '/\]/');
         $replace = array('_', '');
         $uid = preg_replace($pattern, $replace, $field['name']);
+        error_log( $field['name'] );
         $field['id'] = 'leaflet_' . $uid;
 
         wp_localize_script( 'leaflet-field', 'leaflet_field', $field );
@@ -207,7 +227,7 @@ class acf_field_leaflet extends acf_field
                     <li class="tool tool-remove icon-cancel-circle red"></li>
                     <!--<li class="tool tool-reset icon-reload right red"></li>-->
                 </ul>
-                <div id="map" style="height:350px;" data-uid="leaflet_map_<?php echo $uid; ?>"></div>
+                <div id="<?php echo $field['id'] . '_map'; ?>" style="height:<?php echo $field['height']; ?>px;" data-uid="leaflet_map_<?php echo $uid; ?>"></div>
             </div>
         <?php
     }
@@ -236,7 +256,6 @@ class acf_field_leaflet extends acf_field
     
 
         // format value
-
         return $value;
     }
     

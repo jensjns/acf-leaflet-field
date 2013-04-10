@@ -24,6 +24,13 @@ The field itself is a leaflet-map which you can add markers to.
 1. Add a Leaflet field to a ACF field group and save
 1. The field is now ready for use
 
+== Instructions ==
+To render a map all you have to do is use `the_leaflet_field( $field_name );` where you want to render the map.
+
+== GitHub ==
+
+If you want the latest development version of this plugin it is available over at my [github repository](https://github.com/jensjns/acf-leaflet-field/). The github repository will always have the latest code and may occasionally be broken and not work at all.
+
 == Frequently Asked Questions ==
 
 = I activated the plugin but nothing cool happened ;( =
@@ -32,15 +39,14 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 
 = What is CloudMade and why do I need an API-key from them? =
 
-CloudMade delivers the map-data needed to actually see a map (the tiled images).
-The first 500k tiles you load with your API-key will be free. Please refer to [cloudmade.com](http://cloudmade.com/) for further details about their pricing.  Alternative providers will be investigated in the future.
+CloudMade delivers the map-data needed. Alternative tile-providers will be investigated in the near future.
 
 == Changelog ==
 
-= 0.1 =
+= 0.1.0 =
 * Release
 
 == Upgrade Notice ==
 
-= 0.1 =
+= 0.1.0 =
 * Release

@@ -4,7 +4,7 @@
     Plugin Name: Advanced Custom Fields: Leaflet field
     Plugin URI: https://github.com/jensjns/acf-leaflet-field/
     Description: Adds a Leaflet field to Advanced Custom Fields.
-    Version: 0.1
+    Version: 0.1.0
     Author: Jens Nilsson
     Author URI: http://jensnilsson.nu/
     License: GPLv2 or later
@@ -28,9 +28,50 @@ class acf_field_leaflet_plugin
     {
         include_once('leaflet-field.php');
     }
-
 }
 
-new acf_field_leaflet_plugin();
+$leaflet_field_plugin = new acf_field_leaflet_plugin();
+
+    /**
+     *  create_field()
+     *
+     *  Create the HTML interface for your field
+     *
+     *  @param   $field_name - The name of the field
+     *  @param   $post_id - Optional, the id of the post
+     *
+     *  @since   0.1.0
+     *  @date    10/04/13
+     */
+    function the_leaflet_field( $field_name, $post_id = false ) {
+        if( !$post_id ) {
+            global $post;
+            $post_id = $post->ID;
+        }
+
+        $field_obj = get_field_object( 
+            $field_name,
+            $post_id,
+            array(
+                'load_value' => true
+            )
+        );
+
+        $field_obj['value'] = json_decode($field_obj['value']);
+
+        if( $field_obj['value'] ) {
+            // enqueue styles
+            wp_enqueue_style( 'leaflet', plugins_url( '/js/leaflet/leaflet.css', __FILE__ ), array(), '0.5.1', 'all' );
+            wp_enqueue_style( 'leaflet-ie', plugins_url( '/js/leaflet/leaflet.ie.css', __FILE__ ), array( 'leaflet' ), '0.5.1' );
+            $GLOBALS['wp_styles']->add_data( 'leaflet-ie', 'conditional', 'lte IE 8' );
+
+            // enqueue scripts
+            wp_enqueue_script( 'jquery' );
+            wp_enqueue_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.5.1', true );
+            wp_enqueue_script( 'leaflet-frontend', plugins_url( '/js/leaflet-frontend.js', __FILE__ ), array( 'jquery', 'leaflet' ), '1', true );
+            wp_localize_script( 'leaflet-frontend', 'leaflet_field', $field_obj );
+            echo '<div id="' . $field_obj['id'] . '_map" class="leaflet-map" style="height:' . $field_obj['height'] . 'px;"></div>';
+        }
+    }
 
 ?>

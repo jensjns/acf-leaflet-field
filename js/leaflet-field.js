@@ -43,7 +43,7 @@ jQuery(document).ready(function($) {
             }
         }
 
-        var map = L.map('map', {
+        var map = L.map( leaflet_field.id + '_map', {
             center: new L.LatLng( map_settings.center.lat, map_settings.center.lng ),
             zoom: map_settings.zoom_level,
             doubleClickZoom: false
