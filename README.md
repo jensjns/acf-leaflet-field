@@ -11,3 +11,7 @@ Installation
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Register for an account at CloudMade and get you API-key.
 1. Add a Leaflet field to a ACF field group and save
+
+Instructions
+------------
+Use ```the_leaflet_field( $field_name );``` where you want to render the map.
