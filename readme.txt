@@ -1,6 +1,6 @@
 === Advanced Custom Fields: Leaflet field ===
 Contributors: jensnilsson
-Tags: Advanced Custom Fields, acf, acf4, custom fields, admin, wp-admin
+Tags: Advanced Custom Fields, acf, acf4, custom fields, admin, wp-admin, map, leaflet
 Requires at least: 3.0.0
 Tested up to: 3.5.1
 Stable tag: trunk
