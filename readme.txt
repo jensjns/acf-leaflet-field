@@ -31,6 +31,7 @@ To render a map all you have to do is use `the_leaflet_field( $field_name );` wh
 
 == To do ==
 Thing I plan on adding in the near future.
+
 1. Popups that can be added to each marker.
 1. Support for drawing polylines.
 1. Support for alternative tile-providers including your own tiles.
@@ -49,6 +50,11 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 = What is CloudMade and why do I need an API-key from them? =
 
 CloudMade delivers the map-data needed. Alternative tile-providers will be investigated in the near future.
+
+== Screenshots ==
+
+1. Leaflet field with some markers.
+2. Settings for the Leaflet field.
 
 == Changelog ==
 
