@@ -1,6 +1,5 @@
 === Advanced Custom Fields: Leaflet field ===
 Contributors: jensnilsson
-Donate link: http://jensnilsson.nu/
 Tags: Advanced Custom Fields, acf, acf4, custom fields, admin, wp-admin
 Requires at least: 3.0.0
 Tested up to: 3.5.1
@@ -15,15 +14,15 @@ Addon for Advanced Custom Fields that adds a Leaflet field to the available fiel
 This plugin adds a [Leaflet](http://leafletjs.com) map field to the [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/) plugin. Use it to display beutiful maps with markers along with your posts and pages.
 
 * Add multiple markers to the map.
-* The field saves both your zoom-level and viewport location.
+* The field stores both your zoom-level and viewport location.
 * Function to render the map in your theme is included in the plugin: `<?php the_leaflet_field( $field_name ); ?>`, just plug and play!
 
 == Installation ==
 
-1. Upload `acf-leaflet-field` to the `/wp-content/plugins/` directory
+1. Upload `advanced-custom-fields-leaflet-field` to the `/wp-content/plugins/` directory
 1. Make sure you have [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/) installed and activated
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Register for an account at CloudMade to get you API-key
+1. Register for an account at CloudMade to get an API-key
 1. Add a Leaflet field to a ACF field group and save
 1. The field is now ready for use
 
