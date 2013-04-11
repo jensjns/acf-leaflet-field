@@ -1,5 +1,6 @@
 ACF Leaflet field
 =================
+The latest stable release can be found [here](http://wordpress.org/extend/plugins/advanced-custom-fields-leaflet-field/).
 Description
 -----------
 Addon for [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/) that adds a Leaflet field to the available field types.
