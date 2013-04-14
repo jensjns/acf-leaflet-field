@@ -52,7 +52,11 @@ jQuery(document).ready(function($) {
 
         if( Object.keys(map_settings.markers).length > 0 ) {
             $.each(map_settings.markers, function(index, marker) {
-                map.addLayer( L.marker( [marker.coords.lat, marker.coords.lng] ) );
+                new_marker = L.marker( [marker.coords.lat, marker.coords.lng] );
+                if( typeof marker.popup_content != 'undefined' ) {
+                    new_marker.bindPopup(marker.popup_content);
+                }
+                map.addLayer( new_marker );
             });
         }
 

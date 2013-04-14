@@ -99,7 +99,24 @@ jQuery(document).ready(function($) {
                     map.removeLayer(marker);
                 }
                 else if( active_tool.hasClass('tool-tag') ) {
-                    marker.bindPopup('Tjena');
+                    if( typeof map_settings.markers['m_' + marker._leaflet_id].popup_content == 'undefined' ) {
+                        content = '';
+                    }
+                    else {
+                        content = map_settings.markers['m_' + marker._leaflet_id].popup_content;
+                    }
+
+                    popup_html = '<textarea class="acf-leaflet-field-popup-textarea" data-marker-id="' + marker._leaflet_id + '" style="width:200px;height:120px;min-height:0;">' + content + '</textarea>';
+
+                    if( typeof marker._popup == 'undefined' ) {
+                        // bind a popup to the marker
+                        marker.bindPopup(popup_html, {maxWidth:300, maxHeight:200}).openPopup();
+                    }
+                    else {
+                        // open this markers popup
+                        marker._popup.setContent(popup_html);
+                        marker.openPopup();
+                    }
                 }
 
                 update_field();
@@ -122,8 +139,18 @@ jQuery(document).ready(function($) {
             map_settings.zoom_level = map.getZoom();
             field.val(JSON.stringify(map_settings));
         }
-    }
 
+        $(document).on('keyup', '.leaflet-map .acf-leaflet-field-popup-textarea', function(e){
+            var textarea = $(this);
+            var marker_id = 'm_' + textarea.data('marker-id')
+            map_settings.markers[marker_id].popup_content = textarea.val();
+
+            if( textarea.val().length == 0 ) {
+                delete map_settings.markers[marker_id].popup_content;
+            }
+            update_field();
+        });
+    }
 
     $(document).on('click', '.leaflet-map .tools .tool', function(e){
 

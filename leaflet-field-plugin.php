@@ -3,8 +3,8 @@
 /*
     Plugin Name: Advanced Custom Fields: Leaflet field
     Plugin URI: https://github.com/jensjns/acf-leaflet-field/
-    Description: Adds a Leaflet field to Advanced Custom Fields.
-    Version: 0.1.0
+    Description: Adds a Leaflet map-field to Advanced Custom Fields.
+    Version: 0.2.0
     Author: Jens Nilsson
     Author URI: http://jensnilsson.nu/
     License: GPLv2 or later
