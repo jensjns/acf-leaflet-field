@@ -1,7 +1,7 @@
-=== Advanced Custom Fields: Leaflet field ===
+=== Advanced Custom Fields: Leaflet Field ===
 Contributors: jensnilsson
 Tags: Advanced Custom Fields, acf, acf4, custom fields, admin, wp-admin, map, leaflet
-Requires at least: 3.0.0
+Requires at least: 3.4
 Tested up to: 3.5.1
 Stable tag: trunk
 License: GPLv2 or later
@@ -58,6 +58,9 @@ CloudMade delivers the map-data needed. Alternative tile-providers will be inves
 
 == Changelog ==
 
+= 1.0.0 =
+* Migrated the plugin into field-template for v3 & v4 support.
+
 = 0.2.0 =
 * Added support for binding popups to markers.
 
@@ -65,6 +68,8 @@ CloudMade delivers the map-data needed. Alternative tile-providers will be inves
 * Release
 
 == Upgrade Notice ==
+
+= 1.0.0 =
 
 = 0.2.0 =
 * New feature: Added support for binding popups to markers.
