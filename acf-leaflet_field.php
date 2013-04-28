@@ -96,8 +96,6 @@ new acf_field_leaflet_field_plugin();
             )
         );
 
-        $field_obj['value'] = json_decode($field_obj['value']);
-
         if( $field_obj['value'] ) {
             // enqueue styles
             wp_enqueue_style( 'leaflet', plugins_url( '/js/leaflet/leaflet.css', __FILE__ ), array(), '0.5.1', 'all' );
