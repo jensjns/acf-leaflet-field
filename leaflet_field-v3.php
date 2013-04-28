@@ -413,7 +413,6 @@ class acf_field_leaflet_field extends acf_Field
                         $(document).on('keyup', '.leaflet-map .acf-leaflet-field-popup-textarea', function(e){
 
                             var uid = $(this).parents('.leaflet-map').attr('data-uid');
-                            console.log(uid);
                             var textarea = $(this);
                             var marker_id = 'm_' + textarea.data('marker-id');
                             window.map_settings[uid].markers[marker_id].popup_content = textarea.val();
@@ -612,7 +611,7 @@ class acf_field_leaflet_field extends acf_Field
 		
 		// format value
 		$value = json_decode($value);
-		
+
 		// return value
 		return $value;
 
