@@ -43,11 +43,13 @@ jQuery(document).ready(function($) {
             }
         }
 
-        var map = L.map( leaflet_field.id + '_map', {
+        window.map = L.map( leaflet_field.id + '_map', {
             center: new L.LatLng( map_settings.center.lat, map_settings.center.lng ),
             zoom: map_settings.zoom_level,
             doubleClickZoom: false
         });
+
+        var map = window.map;
 
         L.tileLayer('http://{s}.tile.cloudmade.com/' + leaflet_field.api_key + '/997/256/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
@@ -81,11 +83,17 @@ jQuery(document).ready(function($) {
 
             update_field();
         }).on('zoomend', function(e){
-            // the map was zoomed
+            // the map was zoomed, update field
             update_field();
         }).on('dragend', function(e){
-            // the map was dragged
+            // the map was dragged, update field
             update_field();
+        }).on('locationfound', function(e){
+            // users location was found, pan to the location and update field
+            map.panTo(e.latlng);
+            update_field();
+        }).on('locationerror', function(e){
+            // users location could not be found
         });
 
         function add_marker( marker ) {
@@ -156,6 +164,10 @@ jQuery(document).ready(function($) {
 
         if( $(this).hasClass('tool-reset') ) {
             // TODO: Clear map and the field-value
+        }
+        else if( $(this).hasClass('tool-compass') ) {
+            // try to locate the user
+            window.map.locate();
         }
         else {
             $('.leaflet-map .tools .active').removeClass('active');

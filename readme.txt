@@ -60,6 +60,7 @@ CloudMade delivers the map-data needed. Alternative tile-providers will be inves
 
 = 1.0.0 =
 * Migrated the plugin into field-template for v3 & v4 support.
+* New tool: Find my location
 
 = 0.2.0 =
 * Added support for binding popups to markers.

@@ -183,7 +183,7 @@ class acf_field_leaflet_field extends acf_field
             <input type="hidden" value='<?php echo $field['value']; ?>' id="leaflet_<?php echo $uid; ?>" name="<?php echo $field['name']; ?>"/>
             <div class="leaflet-map">
                 <ul class="tools">
-                    <!--<li class="tool tool-compass icon-compass"></li>-->
+                    <li class="tool tool-compass icon-compass"></li>
                     <li class="tool tool-marker icon-location active"></li>
                     <li class="tool tool-tag icon-comment-alt2-fill"></li>
                     <!--<li class="tool tool-path icon-share"></li>-->
