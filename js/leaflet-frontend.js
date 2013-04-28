@@ -1,6 +1,4 @@
 jQuery(document).ready(function($) {
-    console.log(leaflet_field);
-
     // only render the map if an api-key is present
     if( typeof leaflet_field.api_key != 'undefined' ) {
         render_leaflet_map();
@@ -59,8 +57,6 @@ jQuery(document).ready(function($) {
                 map.addLayer( new_marker );
             });
         }
-
-        console.log($('#'+leaflet_field.id).height());
     }
 
 });
