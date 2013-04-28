@@ -30,12 +30,12 @@ This plugin adds a [Leaflet](http://leafletjs.com) map field to the [Advanced Cu
 To render a map all you have to do is use `the_leaflet_field( $field_name );` where you want to render the map.
 
 == To do ==
-Thing I plan on adding in the near future.
+Things I plan to add to the plugin:
 
-1. Support for alternative tile-providers including your own tiles.
+1. Adding images to popups.
 1. Support for drawing polylines.
 1. Support for alternative marker-icons.
-1. Adding images to popups.
+1. Support for alternative tile-providers including your own tiles.
 
 == GitHub ==
 
@@ -60,7 +60,8 @@ CloudMade delivers the map-data needed. Alternative tile-providers will be inves
 
 = 1.0.0 =
 * Migrated the plugin into field-template for v3 & v4 support.
-* New tool: Find my location
+* New tool: Locate tool.
+* Fixed repeater-support.
 
 = 0.2.0 =
 * Added support for binding popups to markers.
@@ -71,6 +72,8 @@ CloudMade delivers the map-data needed. Alternative tile-providers will be inves
 == Upgrade Notice ==
 
 = 1.0.0 =
+* New tool: Locate tool.
+* The field now works with the repeater-field.
 
 = 0.2.0 =
 * New feature: Added support for binding popups to markers.
