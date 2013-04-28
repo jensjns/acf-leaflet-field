@@ -192,14 +192,14 @@ class acf_field_leaflet_field extends acf_field
                         // Get the hidden input-field
                         var field = $('#field_' + uid);
 
-                        var map_settings = null;
+                        window.map_settings[uid] = null;
 
                         // check if we have a saved value
                         if( field.val().length > 0 ) {
-                            map_settings = JSON.parse(field.val());
+                            window.map_settings[uid] = JSON.parse(field.val());
                         }
                         else {
-                            map_settings = {
+                            window.map_settings[uid] = {
                                 zoom_level:null,
                                 center:{
                                     lat:null,
@@ -209,27 +209,27 @@ class acf_field_leaflet_field extends acf_field
                             };
                         }
 
-                        if( map_settings.center.lat == null ) {
-                            map_settings.center.lat = field.attr('data-lat');
+                        if( window.map_settings[uid].center.lat == null ) {
+                            window.map_settings[uid].center.lat = field.attr('data-lat');
                         }
 
-                        if( map_settings.center.lng == null ) {
-                            map_settings.center.lng = field.attr('data-lng');
+                        if( window.map_settings[uid].center.lng == null ) {
+                            window.map_settings[uid].center.lng = field.attr('data-lng');
                         }
 
                         // check if the zoom level is set and within 1-18
-                        if( map_settings.zoom_level == null || map_settings.zoom_level > 18 || map_settings.zoom_level < 1 ) {
+                        if( window.map_settings[uid].zoom_level == null || window.map_settings[uid].zoom_level > 18 || window.map_settings[uid].zoom_level < 1 ) {
                             if( field.attr('data-zoom-level') > 0 && field.attr('data-zoom-level') < 19 ) {
-                                map_settings.zoom_level = field.attr('data-zoom-level');
+                                window.map_settings[uid].zoom_level = field.attr('data-zoom-level');
                             }
                             else {
-                                map_settings.zoom_level = 13;
+                                window.map_settings[uid].zoom_level = 13;
                             }
                         }
 
                         window.maps[uid] = L.map( "map_" + uid, {
-                            center: new L.LatLng( map_settings.center.lat, map_settings.center.lng ),
-                            zoom: map_settings.zoom_level,
+                            center: new L.LatLng( window.map_settings[uid].center.lat, window.map_settings[uid].center.lng ),
+                            zoom: window.map_settings[uid].zoom_level,
                             doubleClickZoom: false
                         });
 
@@ -239,28 +239,28 @@ class acf_field_leaflet_field extends acf_field
                         }).addTo(window.maps[uid]);
 
                         // render existing markers if we have any
-                        if( Object.keys(map_settings.markers).length > 0 ) {
+                        if( Object.keys(window.map_settings[uid].markers).length > 0 ) {
                             var newMarkers = {};
-                            $.each(map_settings.markers, function(index, marker) {
+                            $.each(window.map_settings[uid].markers, function(index, marker) {
                                 var newMarker = L.marker([marker.coords.lat, marker.coords.lng], {draggable: true});
                                 index = add_marker(newMarker);
                                 marker.id = index;
                                 newMarkers['m_' + index] = marker;
                             });
 
-                            map_settings.markers = newMarkers;
+                            window.map_settings[uid].markers = newMarkers;
                             update_field(uid);
                         }
 
                         window.maps[uid].on('click', function(e){
-                            active_tool = $('.tools .tool.active');
+                            var active_tool = $('#leaflet_field-wrapper_' + uid + ' .tools .tool.active');
 
                             if( active_tool.hasClass('tool-marker') ) {
                                 // the marker-tool is currently being used
                                 var marker = L.marker(e.latlng, {draggable: true});
                                 index = add_marker( marker );
-                                map_settings.markers['m_' + index] = {coords:e.latlng};
-                                map_settings.markers['m_' + index].id = index;
+                                window.map_settings[uid].markers['m_' + index] = {coords:e.latlng};
+                                window.map_settings[uid].markers['m_' + index].id = index;
                             }
 
                             update_field(uid);
@@ -273,27 +273,29 @@ class acf_field_leaflet_field extends acf_field
                         }).on('locationfound', function(e){
                             // users location was found, pan to the location and update field
                             window.maps[uid].panTo(e.latlng);
+                            window.maps[uid].stopLocate();
                             update_field(uid);
                         }).on('locationerror', function(e){
                             // users location could not be found
+                            window.maps[uid].stopLocate();
                         });
 
                         function add_marker( marker ) {
                             window.maps[uid].addLayer(marker);
 
                             marker.on('click', function(e) {
-                                active_tool = $('.tools .tool.active');
+                                var active_tool = $('#leaflet_field-wrapper_' + uid + ' .tools .tool.active');
 
                                 if( active_tool.hasClass('tool-remove') ) {
-                                    delete map_settings.markers['m_' + e.target._leaflet_id];
+                                    delete window.map_settings[uid].markers['m_' + e.target._leaflet_id];
                                     window.maps[uid].removeLayer(marker);
                                 }
                                 else if( active_tool.hasClass('tool-tag') ) {
-                                    if( typeof map_settings.markers['m_' + marker._leaflet_id].popup_content == 'undefined' ) {
+                                    if( typeof window.map_settings[uid].markers['m_' + marker._leaflet_id].popup_content == 'undefined' ) {
                                         content = '';
                                     }
                                     else {
-                                        content = map_settings.markers['m_' + marker._leaflet_id].popup_content;
+                                        content = window.map_settings[uid].markers['m_' + marker._leaflet_id].popup_content;
                                     }
 
                                     popup_html = '<textarea class="acf-leaflet-field-popup-textarea" data-marker-id="' + marker._leaflet_id + '" style="width:200px;height:120px;min-height:0;">' + content + '</textarea>';
@@ -312,8 +314,8 @@ class acf_field_leaflet_field extends acf_field
                                 update_field(uid);
                             }).on('dragend', function(e) {
                                 newLatLng = e.target.getLatLng();
-                                map_settings.markers['m_' + e.target._leaflet_id].coords.lat = newLatLng.lat;
-                                map_settings.markers['m_' + e.target._leaflet_id].coords.lng = newLatLng.lng;
+                                window.map_settings[uid].markers['m_' + e.target._leaflet_id].coords.lat = newLatLng.lat;
+                                window.map_settings[uid].markers['m_' + e.target._leaflet_id].coords.lng = newLatLng.lng;
                                 update_field(uid);
                             });
 
@@ -324,36 +326,41 @@ class acf_field_leaflet_field extends acf_field
                         function update_field(uid) {
                             // update center and zoom-level
                             var center = window.maps[uid].getCenter();
-                            map_settings.center.lat = center.lat;
-                            map_settings.center.lng = center.lng;
-                            map_settings.zoom_level = window.maps[uid].getZoom();
-                            field.val(JSON.stringify(map_settings));
+                            window.map_settings[uid].center.lat = center.lat;
+                            window.map_settings[uid].center.lng = center.lng;
+                            window.map_settings[uid].zoom_level = window.maps[uid].getZoom();
+                            var field = $('#field_' + uid);
+                            field.val(JSON.stringify(window.map_settings[uid]));
                         }
 
                         $(document).on('keyup', '.leaflet-map .acf-leaflet-field-popup-textarea', function(e){
+
+                            var uid = $(this).parents('.leaflet-map').attr('data-uid');
+                            console.log(uid);
                             var textarea = $(this);
-                            var marker_id = 'm_' + textarea.data('marker-id')
-                            map_settings.markers[marker_id].popup_content = textarea.val();
+                            var marker_id = 'm_' + textarea.data('marker-id');
+                            window.map_settings[uid].markers[marker_id].popup_content = textarea.val();
 
                             if( textarea.val().length == 0 ) {
-                                delete map_settings.markers[marker_id].popup_content;
+                                delete window.map_settings[uid].markers[marker_id].popup_content;
                             }
+
                             update_field(uid);
                         });
                     }
 
                     $(document).on('click', '.leaflet-map .tools .tool', function(e){
+                        var uid = $(this).parents('.leaflet-map').attr('data-uid');
 
                         if( $(this).hasClass('tool-reset') ) {
                             // TODO: Clear map and the field-value
                         }
                         else if( $(this).hasClass('tool-compass') ) {
                             // try to locate the user
-                            var uid = $(this).parents('.leaflet-map').attr('data-uid');
                             window.maps[uid].locate();
                         }
                         else {
-                            $('.leaflet-map .tools .active').removeClass('active');
+                            $('#leaflet_field-wrapper_' + uid + ' .leaflet-map .tools .active').removeClass('active');
                             $(this).addClass('active');
                         }
                     });
@@ -362,6 +369,10 @@ class acf_field_leaflet_field extends acf_field
                 jQuery(document).on('acf/setup_fields', function(e, postbox){
                     if( typeof window.maps == 'undefined' ) {
                         window.maps = {};
+                    }
+
+                    if( typeof window.map_settings == 'undefined' ) {
+                        window.map_settings = {};
                     }
         
                     jQuery(postbox).find('.leaflet-map').each(function(){
@@ -373,17 +384,19 @@ class acf_field_leaflet_field extends acf_field
                     });
                 });
             </script>
-            <input type="hidden" value='<?php echo $field['value']; ?>' id="field_<?php echo $uid; ?>" name="<?php echo $field['name']; ?>" data-zoom-level="<?php echo $field['zoom_level']; ?>" data-lat="<?php echo $field['lat']; ?>" data-lng="<?php echo $field['lng']; ?>" />
-            <div class="leaflet-map" data-uid="<?php echo $uid; ?>">
-                <ul class="tools">
-                    <li class="tool tool-compass icon-compass"></li>
-                    <li class="tool tool-marker icon-location active"></li>
-                    <li class="tool tool-tag icon-comment-alt2-fill"></li>
-                    <!--<li class="tool tool-path icon-share"></li>-->
-                    <li class="tool tool-remove icon-cancel-circle red"></li>
-                    <!--<li class="tool tool-reset icon-reload right red"></li>-->
-                </ul>
-                <div id="map_<?php echo $uid; ?>" style="height:<?php echo $field['height']; ?>px;"></div>
+            <div id="leaflet_field-wrapper_<?php echo $uid; ?>">
+                <input type="hidden" value='<?php echo $field['value']; ?>' id="field_<?php echo $uid; ?>" name="<?php echo $field['name']; ?>" data-zoom-level="<?php echo $field['zoom_level']; ?>" data-lat="<?php echo $field['lat']; ?>" data-lng="<?php echo $field['lng']; ?>" />
+                <div class="leaflet-map" data-uid="<?php echo $uid; ?>">
+                    <ul class="tools">
+                        <li class="tool tool-compass icon-compass"></li>
+                        <li class="tool tool-marker icon-location active"></li>
+                        <li class="tool tool-tag icon-comment-alt2-fill"></li>
+                        <!--<li class="tool tool-path icon-share"></li>-->
+                        <li class="tool tool-remove icon-cancel-circle red"></li>
+                        <!--<li class="tool tool-reset icon-reload right red"></li>-->
+                    </ul>
+                    <div id="map_<?php echo $uid; ?>" style="height:<?php echo $field['height']; ?>px;"></div>
+                </div>
             </div>
 		<?php
 	}
@@ -413,9 +426,7 @@ class acf_field_leaflet_field extends acf_field
         // scripts
         wp_enqueue_script( 'jquery' );
         wp_register_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.5.1', true );
-        //wp_register_script( 'leaflet-field', plugins_url( '/js/leaflet-field.js', __FILE__ ), array( 'jquery', 'leaflet' ), '1', true );
         wp_enqueue_script( 'leaflet' );
-        //wp_enqueue_script( 'leaflet-field' );
 	}
 	
 	
@@ -571,8 +582,8 @@ class acf_field_leaflet_field extends acf_field
 		// defaults?
 		$field = array_merge($this->defaults, $field);
 		
-		// perhaps use $field['preview_size'] to alter the $value?
-		
+        // format value
+		$value = json_decode($value);
 		
 		// Note: This function can be removed if not used
 		return $value;
