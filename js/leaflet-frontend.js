@@ -1,8 +1,6 @@
 jQuery(document).ready(function($) {
     // only render the map if an api-key is present
-    if( typeof leaflet_field.api_key != 'undefined' ) {
-        render_leaflet_map();
-    }
+    render_leaflet_map();
 
     function render_leaflet_map() {
         if( typeof leaflet_field.value == 'object' ) {
@@ -42,9 +40,9 @@ jQuery(document).ready(function($) {
             zoom: map_settings.zoom_level,
             doubleClickZoom: true
         });
-
-        L.tileLayer('http://{s}.tile.cloudmade.com/' + leaflet_field.api_key + '/997/256/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        console.log(leaflet_field);
+        L.tileLayer(leaflet_field.map_provider.url, {
+            attribution: leaflet_field.map_provider.attribution,
             maxZoom: 18
         }).addTo(map);
 
