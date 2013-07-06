@@ -6,7 +6,22 @@ class acf_field_leaflet_field extends acf_Field
 	// vars
 	var $settings, // will hold info such as dir / path
 		$defaults; // will hold default field options
-		
+
+    // holds information about supported tile-providers
+    static $map_providers = array(
+        'openstreetmap' => array(
+            'url'           => 'http://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'requires_key'  => false,
+            'nicename'      => 'OpenStreetMap',
+            'attribution'   => 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+        ),
+        'cloudmade'     => array(
+            'url'           => "http://{s}.tile.cloudmade.com/{api_key}/997/256/{z}/{x}/{y}.png",
+            'requires_key'  => true,
+            'nicename'      => 'CloudMade',
+            'attribution'   => 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+        )
+    );
 		
 	/*--------------------------------------------------------------------------------------
 	*
@@ -32,7 +47,8 @@ class acf_field_leaflet_field extends acf_Field
             'lng'           => '13.002',
             'zoom_level'    => 13,
             'height'        => 350,
-            'api_key'       => ''
+            'api_key'       => '',
+            'map_provider'  => 'openstreetmap'
 		);
 		
 		
@@ -41,7 +57,7 @@ class acf_field_leaflet_field extends acf_Field
 		$this->settings = array(
 			'path' => $this->helpers_get_path( __FILE__ ),
 			'dir' => $this->helpers_get_dir( __FILE__ ),
-			'version' => '1.0.0'
+			'version' => '1.1.0'
 		);
 		
    	}
@@ -251,8 +267,6 @@ class acf_field_leaflet_field extends acf_Field
         $pattern = array('/\[/', '/\]/');
         $replace = array('_', '');
         $uid = preg_replace($pattern, $replace, $field['name']);
-        //error_log( $field['name'] );
-        //error_log($uid);
         $field['id'] = $uid;
 
         // include the javascript

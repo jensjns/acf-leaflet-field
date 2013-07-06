@@ -2,7 +2,7 @@
 Contributors: jensnilsson
 Tags: Advanced Custom Fields, acf, acf4, custom fields, admin, wp-admin, map, leaflet, map markers
 Requires at least: 3.4
-Tested up to: 3.5.1
+Tested up to: 3.5.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,15 +27,14 @@ This plugin adds a [Leaflet](http://leafletjs.com) map field to the [Advanced Cu
 1. The field is now ready for use
 
 == Instructions ==
-To render a map all you have to do is use `the_leaflet_field( $field_name );` where you want to render the map.
+
+A rendering function is provided in the plugin. If you want to use it all you have to do is use `the_leaflet_field( $field_name );` where you want to render the map. I recommended you to build your own rendering though.
 
 == To do ==
 Things I plan to add to the plugin:
 
-1. Support for drawing polylines.
 1. Adding images to popups.
-1. Support for alternative marker-icons.
-1. Use [GeoJSON](http://www.geojson.org/) as data structure
+1. Support for drawing polylines.
 1. Provide a tool for importing GeoJSON-structured data into the field.
 
 == GitHub ==
@@ -56,7 +55,8 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 == Changelog ==
 
 = 1.1.0 =
-* Added support for OpenStreetMap as tile-provider.
+* Added support for OpenStreetMap as tile-provider. This will be the new default tile-provider.
+* Switched to geoJson for data-structure.
 
 = 1.0.0 =
 * Migrated the plugin into field-template for v3 & v4 support.
@@ -73,6 +73,7 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 
 = 1.1.0 =
 * New tile-provider: OpenStreetMap, which is now the default tile-provider since it doesn't require an api-key.
+* Changed the data-structure to geoJson. IMPORTANT: Breaking change. Sorry.
 
 = 1.0.0 =
 * New tool: Locate tool.

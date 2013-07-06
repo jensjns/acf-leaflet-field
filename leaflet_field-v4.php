@@ -35,8 +35,8 @@ class acf_field_leaflet_field extends acf_field
 	{
 		// vars
 		$this->name = 'leaflet_field';
-		$this->label = __('Leaflet Field');
-		$this->category = __("Content",'acf'); // Basic, Content, Choice, etc
+		$this->label = __( 'Leaflet Field' );
+		$this->category = __( 'Content','acf' ); // Basic, Content, Choice, etc
 		$this->defaults = array(
 			'lat'           => '55.606',
             'lng'           => '13.002',
@@ -53,12 +53,12 @@ class acf_field_leaflet_field extends acf_field
     	
     	// settings
 		$this->settings = array(
-			'path' => apply_filters('acf/helpers/get_path', __FILE__),
-			'dir' => apply_filters('acf/helpers/get_dir', __FILE__),
+			'path' => apply_filters( 'acf/helpers/get_path', __FILE__ ),
+			'dir' => apply_filters( 'acf/helpers/get_dir', __FILE__ ),
 			'version' => '1.0.0'
 		);
 
-        add_action( 'acf/field_group/admin_head', array($this, 'conditional_options') );
+        add_action( 'acf/field_group/admin_head', array( $this, 'conditional_options' ) );
 	}
 	
 	
@@ -260,14 +260,14 @@ class acf_field_leaflet_field extends acf_field
         $field = array_merge($this->defaults, $field);
 
         // Build an unique id based on ACF's one.
-        $pattern = array('/\[/', '/\]/');
-        $replace = array('_', '');
+        $pattern = array( '/\[/', '/\]/' );
+        $replace = array( '_', '' );
         $uid = preg_replace($pattern, $replace, $field['name']);
 
         $field['id'] = $uid;
 
         // resolve tile-layer and attribution
-        $tile_layer = str_replace('{api_key}', $field['api_key'], acf_field_leaflet_field::$map_providers[$field['map_provider']]['url']);
+        $tile_layer = str_replace( '{api_key}', $field['api_key'], acf_field_leaflet_field::$map_providers[$field['map_provider']]['url'] );
         $attribution = acf_field_leaflet_field::$map_providers[$field['map_provider']]['attribution'];
 
         // include the javascript
@@ -471,10 +471,10 @@ class acf_field_leaflet_field extends acf_field
 	function format_value_for_api( $value, $post_id, $field )
 	{
 		// defaults?
-		$field = array_merge($this->defaults, $field);
+		$field = array_merge( $this->defaults, $field );
 		
         // format value
-		$value = json_decode($value);
+		$value = json_decode( $value );
 		
 		// Note: This function can be removed if not used
 		return $value;

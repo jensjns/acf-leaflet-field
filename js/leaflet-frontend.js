@@ -40,7 +40,7 @@ jQuery(document).ready(function($) {
             zoom: map_settings.zoom_level,
             doubleClickZoom: true
         });
-        console.log(leaflet_field);
+
         L.tileLayer(leaflet_field.map_provider.url, {
             attribution: leaflet_field.map_provider.attribution,
             maxZoom: 18
@@ -48,11 +48,13 @@ jQuery(document).ready(function($) {
 
         if( Object.keys(map_settings.markers).length > 0 ) {
             $.each(map_settings.markers, function(index, marker) {
-                new_marker = L.marker( [marker.coords.lat, marker.coords.lng] );
-                if( typeof marker.popup_content != 'undefined' ) {
-                    new_marker.bindPopup(marker.popup_content);
-                }
-                map.addLayer( new_marker );
+                L.geoJson(marker, {
+                    onEachFeature:function(feature, layer){
+                        if(feature.properties && feature.properties.popupContent && feature.properties.popupContent != "") {
+                            layer.bindPopup(feature.properties.popupContent);
+                        }
+                    }
+                }).addTo(map);
             });
         }
     }

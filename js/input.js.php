@@ -3,9 +3,7 @@
         // only render the map if an api-key is present
         var api_key = <?php echo '"'.$field['api_key'].'"'; ?>;
 
-        if( api_key.length > 0 ) {
-            render_leaflet_map(uid);
-        }
+        render_leaflet_map(uid);
 
         function render_leaflet_map(uid) {
             // Get the hidden input-field
@@ -61,8 +59,8 @@
             if( Object.keys(window.map_settings[uid].markers).length > 0 ) {
                 var newMarkers = {};
                 $.each(window.map_settings[uid].markers, function(index, marker) {
-                    var newMarker = L.marker([marker.coords.lat, marker.coords.lng], {draggable: true});
-                    index = add_marker(newMarker);
+                    //var newMarker = L.marker(marker.geometry.coordinates, {draggable: true});
+                    index = add_marker(marker);
                     marker.id = index;
                     newMarkers['m_' + index] = marker;
                 });
@@ -76,9 +74,20 @@
 
                 if( active_tool.hasClass('tool-marker') ) {
                     // the marker-tool is currently being used
-                    var marker = L.marker(e.latlng, {draggable: true});
+                    //var marker = L.marker(e.latlng, {draggable: true});
+                    var marker = {
+                        "type": "Feature",
+                        "properties": {
+                            "popupContent": ""
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [e.latlng.lng, e.latlng.lat]
+                        }
+                    };
+
                     index = add_marker( marker );
-                    window.map_settings[uid].markers['m_' + index] = {coords:e.latlng};
+                    window.map_settings[uid].markers['m_' + index] = marker;
                     window.map_settings[uid].markers['m_' + index].id = index;
                 }
 
@@ -100,46 +109,52 @@
             });
 
             function add_marker( marker ) {
-                window.maps[uid].addLayer(marker);
 
-                marker.on('click', function(e) {
-                    var active_tool = $('#leaflet_field-wrapper_' + uid + ' .tools .tool.active');
+                var geoJsonLayer = L.geoJson(marker, {
+                    onEachFeature:function( feature, layer ){
+                        layer.options.draggable = true;
 
-                    if( active_tool.hasClass('tool-remove') ) {
-                        delete window.map_settings[uid].markers['m_' + e.target._leaflet_id];
-                        window.maps[uid].removeLayer(marker);
+                        layer.on('click', function(e) {
+                            var active_tool = $('#leaflet_field-wrapper_' + uid + ' .tools .tool.active');
+
+                            if( active_tool.hasClass('tool-remove') ) {
+                                delete window.map_settings[uid].markers['m_' + layer._leaflet_id];
+                                window.maps[uid].removeLayer(layer);
+                            }
+                            else if( active_tool.hasClass('tool-tag') ) {
+                                if( typeof window.map_settings[uid].markers['m_' + layer._leaflet_id].properties.popupContent == 'undefined' ) {
+                                    content = '';
+                                }
+                                else {
+                                    content = window.map_settings[uid].markers['m_' + layer._leaflet_id].properties.popupContent;
+                                }
+
+                                popup_html = '<textarea class="acf-leaflet-field-popup-textarea" data-marker-id="' + layer._leaflet_id + '" style="width:200px;height:120px;min-height:0;">' + content + '</textarea>';
+
+                                if( typeof layer._popup == 'undefined' ) {
+                                    // bind a popup to the marker
+                                    //alert('binding pop');
+                                    layer.bindPopup(popup_html, {maxWidth:300, maxHeight:200}).openPopup();
+                                }
+                                else {
+                                    // open this markers popup
+                                    layer._popup.setContent(popup_html);
+                                    layer.openPopup();
+                                }
+                            }
+
+                            update_field(uid);
+                        }).on('dragend', function(e) {
+                            newLatLng = e.target.getLatLng();
+                            window.map_settings[uid].markers['m_' + e.target._leaflet_id].geometry.coordinates = [newLatLng.lng, newLatLng.lat];
+                            //window.map_settings[uid].markers['m_' + e.target._leaflet_id].coords.lat = newLatLng.lat;
+                            //window.map_settings[uid].markers['m_' + e.target._leaflet_id].coords.lng = newLatLng.lng;
+                            update_field(uid);
+                        });
                     }
-                    else if( active_tool.hasClass('tool-tag') ) {
-                        if( typeof window.map_settings[uid].markers['m_' + marker._leaflet_id].popup_content == 'undefined' ) {
-                            content = '';
-                        }
-                        else {
-                            content = window.map_settings[uid].markers['m_' + marker._leaflet_id].popup_content;
-                        }
-
-                        popup_html = '<textarea class="acf-leaflet-field-popup-textarea" data-marker-id="' + marker._leaflet_id + '" style="width:200px;height:120px;min-height:0;">' + content + '</textarea>';
-
-                        if( typeof marker._popup == 'undefined' ) {
-                            // bind a popup to the marker
-                            marker.bindPopup(popup_html, {maxWidth:300, maxHeight:200}).openPopup();
-                        }
-                        else {
-                            // open this markers popup
-                            marker._popup.setContent(popup_html);
-                            marker.openPopup();
-                        }
-                    }
-
-                    update_field(uid);
-                }).on('dragend', function(e) {
-                    newLatLng = e.target.getLatLng();
-                    window.map_settings[uid].markers['m_' + e.target._leaflet_id].coords.lat = newLatLng.lat;
-                    window.map_settings[uid].markers['m_' + e.target._leaflet_id].coords.lng = newLatLng.lng;
-                    update_field(uid);
-                });
-
-                // return the id of this marker
-                return marker._leaflet_id;
+                }).addTo(window.maps[uid]);
+                
+                return geoJsonLayer._layers[geoJsonLayer._leaflet_id-1]._leaflet_id;
             } 
 
             function update_field(uid) {
@@ -152,15 +167,16 @@
                 field.val(JSON.stringify(window.map_settings[uid]));
             }
 
+            /* Handle input inside popups */
             $(document).on('keyup', '.leaflet-map .acf-leaflet-field-popup-textarea', function(e){
 
                 var uid = $(this).parents('.leaflet-map').attr('data-uid');
                 var textarea = $(this);
                 var marker_id = 'm_' + textarea.data('marker-id');
-                window.map_settings[uid].markers[marker_id].popup_content = textarea.val();
+                window.map_settings[uid].markers[marker_id].properties.popupContent = textarea.val();
 
                 if( textarea.val().length == 0 ) {
-                    delete window.map_settings[uid].markers[marker_id].popup_content;
+                    delete window.map_settings[uid].markers[marker_id].properties.popupContent;
                 }
 
                 update_field(uid);
