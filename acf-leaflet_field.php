@@ -1,77 +1,82 @@
 <?php
 /*
-	Plugin Name: Advanced Custom Fields: Leaflet Field
-	Plugin URI: https://github.com/jensjns/acf-leaflet-field
-	Description: Adds a Leaflet map-field to Advanced Custom Fields.
-	Version: 1.1.0
-	Author: Jens Nilsson
-	Author URI: http://jensnilsson.nu/
-	License: GPLv2 or later
-	License URI: http://www.gnu.org/licenses/gpl-2.0.html
+    Plugin Name: Advanced Custom Fields: Leaflet Field
+    Plugin URI: https://github.com/jensjns/acf-leaflet-field
+    Description: Adds a Leaflet map-field to Advanced Custom Fields.
+    Version: 1.1.1
+    Author: Jens Nilsson
+    Author URI: http://jensnilsson.nu/
+    License: GPLv2 or later
+    License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 
 class acf_field_leaflet_field_plugin
 {
-	/*
-	*  Construct
-	*
-	*  @description: 
-	*  @since: 3.6
-	*  @created: 1/04/13
-	*/
-	
-	function __construct()
-	{
-		// set text domain
-		$domain = 'acf-leaflet_field';
-		$mofile = trailingslashit(dirname(__File__)) . 'lang/' . $domain . '-' . get_locale() . '.mo';
-		load_textdomain( $domain, $mofile );
-		
-		
-		// version 4+
-		add_action('acf/register_fields', array($this, 'register_fields'));	
+    /*
+    *  Construct
+    *
+    *  @description:
+    *  @since: 3.6
+    *  @created: 1/04/13
+    */
 
-		
-		// version 3-
-		add_action( 'init', array( $this, 'init' ));
-	}
-	
-	
-	/*
-	*  Init
-	*
-	*  @description: 
-	*  @since: 3.6
-	*  @created: 1/04/13
-	*/
-	
-	function init()
-	{
-		if(function_exists('register_field'))
-		{ 
-			register_field('acf_field_leaflet_field', dirname(__File__) . '/leaflet_field-v3.php');
-		}
-	}
-	
-	/*
-	*  register_fields
-	*
-	*  @description: 
-	*  @since: 3.6
-	*  @created: 1/04/13
-	*/
-	
-	function register_fields()
-	{
-		include_once('leaflet_field-v4.php');
-	}
-	
+    function __construct()
+    {
+        // set text domain
+        $domain = 'acf-leaflet_field';
+        $mofile = trailingslashit(dirname(__File__)) . 'lang/' . $domain . '-' . get_locale() . '.mo';
+        load_textdomain( $domain, $mofile );
+
+        // version 5 (PRO)
+        add_action('acf/include_field_types', array($this, 'register_fields_v5'));
+
+        // version 4+
+        add_action('acf/register_fields', array($this, 'register_fields_v4'));
+
+        // version 3-
+        add_action( 'init', array( $this, 'init' ));
+    }
+
+    /*
+    *  Init
+    *
+    *  @description:
+    *  @since: 3.6
+    *  @created: 1/04/13
+    */
+
+    function init()
+    {
+        if(function_exists('register_field'))
+        {
+            register_field('acf_field_leaflet_field', dirname(__File__) . '/leaflet_field-v3.php');
+        }
+    }
+
+    /*
+    *  register_fields
+    *
+    *  @description:
+    *  @since: 3.6
+    *  @created: 1/04/13
+    */
+
+    function register_fields_v4()
+    {
+        include_once('leaflet_field-v4.php');
+    }
+
+    function register_fields_v5()
+    {
+        include_once('leaflet_field-v5.php');
+    }
+
 }
 
 new acf_field_leaflet_field_plugin();
 
-	/**
+    /**
      *  the_leaflet_field()
      *
      *  Renders leaflet field
@@ -88,7 +93,7 @@ new acf_field_leaflet_field_plugin();
             $post_id = $post->ID;
         }
 
-        $field_obj = get_field_object( 
+        $field_obj = get_field_object(
             $field_name,
             $post_id,
             array(
@@ -114,5 +119,5 @@ new acf_field_leaflet_field_plugin();
             echo '<div id="' . $field_obj['id'] . '_map" class="leaflet-map" style="height:' . $field_obj['height'] . 'px;"></div>';
         }
     }
-		
+
 ?>

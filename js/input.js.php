@@ -153,9 +153,9 @@
                         });
                     }
                 }).addTo(window.maps[uid]);
-                
+
                 return geoJsonLayer._layers[geoJsonLayer._leaflet_id-1]._leaflet_id;
-            } 
+            }
 
             function update_field(uid) {
                 // update center and zoom-level
@@ -200,23 +200,45 @@
         });
     };
 
-    jQuery(document).on('acf/setup_fields', function(e, postbox){
-        if( typeof window.maps == 'undefined' ) {
-            window.maps = {};
-        }
+    if( typeof window.maps == 'undefined' ) {
+        window.maps = {};
+    }
 
-        if( typeof window.map_settings == 'undefined' ) {
-            window.map_settings = {};
-        }
+    if( typeof window.map_settings == 'undefined' ) {
+        window.map_settings = {};
+    }
 
-        jQuery(postbox).find('.leaflet-map').each(function(){
-            map = jQuery(this);
+    function initialize_field( map ) {
+        uid = map.attr('data-uid');
+
+        if( typeof uid == 'undefined') {
+            map = map.find('.leaflet-map');
             uid = map.attr('data-uid');
+        }
 
-            if( typeof window.maps[uid] == 'undefined' ) {
-                window.maps[uid] = null;
-                leaflet_init(uid, map.attr('data-tile-layer'), map.attr('data-attribution'), jQuery);
-            }
+        if( typeof window.maps[uid] == 'undefined' ) {
+            window.maps[uid] = null;
+            leaflet_init(uid, map.attr('data-tile-layer'), map.attr('data-attribution'), jQuery);
+        }
+    }
+
+    if( typeof acf.add_action !== 'undefined' ) {
+
+        acf.add_action('ready append', function( $el ) {
+
+            // search $el for fields of type 'FIELD_NAME'
+            acf.get_fields({ type : 'leaflet_field'}, $el).each(function() {
+
+                initialize_field( jQuery(this) );
+
+            });
+
         });
-    });
+
+    }
+    else {
+        jQuery(postbox).find('.leaflet-map').each(function(){
+            initialize_field( jQuery(this) );
+        });
+    }
 </script>

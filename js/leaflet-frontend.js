@@ -6,6 +6,9 @@ jQuery(document).ready(function($) {
         if( typeof leaflet_field.value == 'object' ) {
             map_settings = leaflet_field.value;
         }
+        else if(typeof leaflet_field.value == 'string') {
+            map_settings = JSON.parse(leaflet_field.value);
+        }
         else {
             map_settings = {
                 zoom_level:null,

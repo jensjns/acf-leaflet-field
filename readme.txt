@@ -2,7 +2,7 @@
 Contributors: jensnilsson
 Tags: Advanced Custom Fields, acf, acf4, custom fields, admin, wp-admin, map, leaflet, map markers
 Requires at least: 3.4
-Tested up to: 3.9.1
+Tested up to: 4.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,7 +11,7 @@ Addon for Advanced Custom Fields that adds a Leaflet field to the available fiel
 
 == Description ==
 
-This plugin adds a [Leaflet](http://leafletjs.com) map field to the [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/) plugin. Use it to display beutiful maps with markers along with your posts and pages.
+This plugin adds a [Leaflet](http://leafletjs.com) map field to the [Advanced Custom Fields](http://www.advancedcustomfields.com/) plugin. Use it to display beutiful maps with markers along with your posts and pages.
 
 * Add multiple markers with popups to the map.
 * The field stores both your zoom-level and viewport location.
@@ -20,7 +20,7 @@ This plugin adds a [Leaflet](http://leafletjs.com) map field to the [Advanced Cu
 == Installation ==
 
 1. Upload `advanced-custom-fields-leaflet-field` to the `/wp-content/plugins/` directory
-1. Make sure you have [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/) installed and activated
+1. Make sure you have [Advanced Custom Fields](http://www.advancedcustomfields.com/) installed and activated
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Add a Leaflet field to a ACF field group and save
 1. The field is now ready for use
@@ -44,7 +44,7 @@ If you want the latest development version of this plugin it is available over a
 
 = I activated the plugin but nothing cool happened ;( =
 
-This is not a standalone plugin, you need to have [Advanced Custom Fields](http://wordpress.org/extend/plugins/advanced-custom-fields/) installed and activated for it to work.
+This is not a standalone plugin, you need to have [Advanced Custom Fields](http://www.advancedcustomfields.com/) installed and activated for it to work.
 
 == Screenshots ==
 
@@ -52,6 +52,9 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 2. Settings for the Leaflet field.
 
 == Changelog ==
+
+= 1.1.1 =
+* Added support for ACF 5 (PRO)
 
 = 1.1.0 =
 * Added support for OpenStreetMap as tile-provider. This will be the new default tile-provider.
@@ -69,6 +72,9 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 * Release
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+* This update adds support for ACF 5 PRO (it still supports both 3.x and 4.x)
 
 = 1.1.0 =
 * New tile-provider: OpenStreetMap, which is now the default tile-provider since it doesn't require an api-key.
