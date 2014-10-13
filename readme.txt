@@ -54,7 +54,7 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 == Changelog ==
 
 = 1.1.2 =
-* 4.3.9 Compability patch
+* 4.3.9 Compatibility patch
 
 = 1.1.1 =
 * Added support for ACF 5 (PRO)
@@ -77,7 +77,7 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 == Upgrade Notice ==
 
 = 1.1.2 =
-* 4.3.9 Compability patch
+* 4.3.9 Compatibility patch
 
 = 1.1.1 =
 * This update adds support for ACF 5 PRO (it still supports both 3.x and 4.x)
