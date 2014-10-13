@@ -35,7 +35,10 @@ class acf_field_leaflet_field_plugin
         add_action('acf/register_fields', array($this, 'register_fields_v4'));
 
         // version 3-
-        add_action( 'init', array( $this, 'init' ));
+        if(function_exists('register_field'))
+        {
+            add_action( 'init', array( $this, 'init' ));
+        }
     }
 
     /*
@@ -48,10 +51,7 @@ class acf_field_leaflet_field_plugin
 
     function init()
     {
-        if(function_exists('register_field'))
-        {
-            register_field('acf_field_leaflet_field', dirname(__File__) . '/leaflet_field-v3.php');
-        }
+        register_field('acf_field_leaflet_field', dirname(__File__) . '/leaflet_field-v3.php');
     }
 
     /*
