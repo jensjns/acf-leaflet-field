@@ -56,7 +56,7 @@ class acf_field_leaflet_field extends acf_field
         $this->settings = array(
             'path' => apply_filters( 'acf/helpers/get_path', __FILE__ ),
             'dir' => apply_filters( 'acf/helpers/get_dir', __FILE__ ),
-            'version' => '1.1.1'
+            'version' => '1.1.2'
         );
 
         add_action( 'acf/field_group/admin_head', array( $this, 'conditional_options' ) );
@@ -309,14 +309,14 @@ class acf_field_leaflet_field extends acf_field
     function input_admin_enqueue_scripts()
     {
         // styles
-        wp_enqueue_style( 'leaflet', plugins_url( '/js/leaflet/leaflet.css', __FILE__ ), array(), '0.7.2', 'all' );
+        wp_enqueue_style( 'leaflet', plugins_url( '/js/leaflet/leaflet.css', __FILE__ ), array(), '0.7.3', 'all' );
 
         wp_enqueue_style( 'icomoon', plugins_url( '/css/icomoon/style.css', __FILE__ ), array(), '1.0.0', 'all' );
         wp_enqueue_style( 'leaflet-field', plugins_url( '/css/input.css', __FILE__ ), array( 'leaflet', 'icomoon' ), '1', 'all' );
 
         // scripts
         wp_enqueue_script( 'jquery' );
-        wp_register_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.7.2', true );
+        wp_register_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.7.3', true );
         wp_enqueue_script( 'leaflet' );
     }
 

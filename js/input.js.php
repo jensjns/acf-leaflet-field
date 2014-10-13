@@ -237,8 +237,10 @@
 
     }
     else {
-        jQuery(postbox).find('.leaflet-map').each(function(){
-            initialize_field( jQuery(this) );
+        jQuery(document).live('acf/setup_fields', function(e, postbox){
+            jQuery(postbox).find('.leaflet-map').each(function(){
+                initialize_field( jQuery(this) );
+            });
         });
     }
 </script>
