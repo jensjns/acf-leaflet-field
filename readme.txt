@@ -47,7 +47,7 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 
 == Screenshots ==
 
-1. Leaflet field with some markers.
+1. Leaflet field with markers, a popup, a polyline and a polygon.
 2. Settings for the Leaflet field.
 
 == Changelog ==
