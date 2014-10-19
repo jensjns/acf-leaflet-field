@@ -55,6 +55,89 @@
                 maxZoom: 18
             }).addTo(window.maps[uid]);
 
+            var controlClick = function(e) {
+                var uid = $(this).parents('.leaflet-map').attr('data-uid');
+
+                if( $(this).hasClass('tool-reset') ) {
+                    // TODO: Clear map and the field-value
+                }
+                else if( $(this).hasClass('tool-compass') ) {
+                    // try to locate the user
+                    window.maps[uid].locate();
+                }
+                else {
+                    $('#leaflet_field-wrapper_' + uid).removeClass();
+                    $('#leaflet_field-wrapper_' + uid).addClass($(this).attr('class').match(/\btool-(\w+)\b/)[0] + '-active');
+
+                    $('#leaflet_field-wrapper_' + uid + ' .leaflet-map .tool.active').removeClass('active');
+                    $(this).addClass('active');
+                }
+            };
+
+            var addControl = function(toolName, icon, active) {
+                active = (active) ? ' active' : '';
+                var newControl = L.control({position: 'topleft'});
+
+                newControl.onAdd = function(){
+                    this._div = L.DomUtil.create('div', 'tool tool-' + toolName + ' icon-' + icon + active);
+
+                    var stop = L.DomEvent.stopPropagation;
+
+                    L.DomEvent
+                        .on(this._div, 'click', stop)
+                        .on(this._div, 'mousedown', stop)
+                        .on(this._div, 'dblclick', stop)
+                        .on(this._div, 'click', L.DomEvent.preventDefault)
+                        .on(this._div, 'click', controlClick);
+
+                    return this._div;
+                };
+
+                newControl.addTo(window.maps[uid]);
+            }
+
+            var controls = {
+                locateControl: addControl('compass', 'compass'),
+                pinControl: addControl('marker', 'location', true),
+                tagControl: addControl('tag', 'comment-alt2-fill'),
+                drawToolsControl: addControl('drawtools', 'share'),
+                removeControl: addControl('remove', 'cancel-circle red'),
+                //resetControl: addControl('reset', 'relaod'),
+            };
+
+            var editableLayer = new L.FeatureGroup();
+            window.maps[uid].addLayer(editableLayer);
+
+            var drawControl = new L.Control.Draw({
+                position: 'topleft',
+                draw: {
+                    polyline: {
+                        shapeOptions: {
+                            color: '#000000'
+                        }
+                    },
+                    polygon: {
+                        shapeOptions: {
+                            color: '#000000'
+                        }
+                    },
+                    circle: false,
+                    rectangle: {
+                    shapeOptions: {
+                            color: '#000000'
+                        }
+                    },
+                    marker: false
+                },
+                edit: {
+                    featureGroup: editableLayer
+                }
+            });
+
+
+
+            window.maps[uid].addControl(drawControl);
+
             // render existing markers if we have any
             if( Object.keys(window.map_settings[uid].markers).length > 0 ) {
                 var newMarkers = {};
@@ -65,12 +148,19 @@
                     newMarkers['m_' + index] = marker;
                 });
 
+                var geoJsonLayer = L.geoJson(window.map_settings[uid].drawnItems, {
+                    onEachFeature: function(feature, layer) {
+                        layer.options.color = "#000000";
+                        editableLayer.addLayer(layer);
+                    }
+                }).addTo(window.maps[uid]);
+
                 window.map_settings[uid].markers = newMarkers;
                 update_field(uid);
             }
 
-            window.maps[uid].on('click', function(e){
-                var active_tool = $('#leaflet_field-wrapper_' + uid + ' .tools .tool.active');
+            window.maps[uid].on('click', function(e) {
+                var active_tool = $('#leaflet_field-wrapper_' + uid + ' .tool.active');
 
                 if( active_tool.hasClass('tool-marker') ) {
                     // the marker-tool is currently being used
@@ -92,30 +182,40 @@
                 }
 
                 update_field(uid);
-            }).on('zoomend', function(e){
+            }).on('zoomend', function(e) {
                 // the map was zoomed, update field
                 update_field(uid);
-            }).on('dragend', function(e){
+            }).on('dragend', function(e) {
                 // the map was dragged, update field
                 update_field(uid);
-            }).on('locationfound', function(e){
+            }).on('locationfound', function(e) {
                 // users location was found, pan to the location and update field
                 window.maps[uid].panTo(e.latlng);
                 window.maps[uid].stopLocate();
                 update_field(uid);
-            }).on('locationerror', function(e){
+            }).on('locationerror', function(e) {
                 // users location could not be found
                 window.maps[uid].stopLocate();
+            }).on('draw:created', function(e) {
+                var type = e.layerType;
+                var layer = e.layer;
+                editableLayer.addLayer(layer);
+                update_field(uid);
+            }).on('draw:deleted', function(e){
+                update_field(uid);
+            }).on('draw:edited', function(e){
+                update_field(uid);
             });
 
             function add_marker( marker ) {
 
                 var geoJsonLayer = L.geoJson(marker, {
-                    onEachFeature:function( feature, layer ){
+                    onEachFeature:function( feature, layer ) {
                         layer.options.draggable = true;
+                        layer.options.riseOnHover = true;
 
                         layer.on('click', function(e) {
-                            var active_tool = $('#leaflet_field-wrapper_' + uid + ' .tools .tool.active');
+                            var active_tool = $('#leaflet_field-wrapper_' + uid + ' .tool.active');
 
                             if( active_tool.hasClass('tool-remove') ) {
                                 delete window.map_settings[uid].markers['m_' + layer._leaflet_id];
@@ -129,17 +229,14 @@
                                     content = window.map_settings[uid].markers['m_' + layer._leaflet_id].properties.popupContent;
                                 }
 
-                                popup_html = '<textarea class="acf-leaflet-field-popup-textarea" data-marker-id="' + layer._leaflet_id + '" style="width:200px;height:120px;min-height:0;">' + content + '</textarea>';
+                                popup_html = '<textarea class="acf-leaflet-field-popup-textarea" data-marker-id="' + layer._leaflet_id + '" style="width:200px;height:125px;min-height:0;">' + content + '</textarea>';
 
                                 if( typeof layer._popup == 'undefined' ) {
                                     // bind a popup to the marker
-                                    //alert('binding pop');
-                                    layer.bindPopup(popup_html, {maxWidth:300, maxHeight:200}).openPopup();
+                                    layer.bindPopup(popup_html, {maxWidth: 300, maxHeight: 200}).openPopup();
                                 }
                                 else {
-                                    // open this markers popup
                                     layer._popup.setContent(popup_html);
-                                    layer.openPopup();
                                 }
                             }
 
@@ -163,6 +260,7 @@
                 window.map_settings[uid].center.lat = center.lat;
                 window.map_settings[uid].center.lng = center.lng;
                 window.map_settings[uid].zoom_level = window.maps[uid].getZoom();
+                window.map_settings[uid].drawnItems = editableLayer.toGeoJSON();
                 var field = $('#field_' + uid);
                 field.val(JSON.stringify(window.map_settings[uid]));
             }
@@ -182,22 +280,6 @@
                 update_field(uid);
             });
         }
-
-        $(document).on('click', '.leaflet-map .tools .tool', function(e){
-            var uid = $(this).parents('.leaflet-map').attr('data-uid');
-
-            if( $(this).hasClass('tool-reset') ) {
-                // TODO: Clear map and the field-value
-            }
-            else if( $(this).hasClass('tool-compass') ) {
-                // try to locate the user
-                window.maps[uid].locate();
-            }
-            else {
-                $('#leaflet_field-wrapper_' + uid + ' .leaflet-map .tools .active').removeClass('active');
-                $(this).addClass('active');
-            }
-        });
     };
 
     if( typeof window.maps == 'undefined' ) {

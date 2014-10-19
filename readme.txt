@@ -33,7 +33,6 @@ A rendering function is provided in the plugin. If you want to use it all you ha
 Things I plan to add to the plugin:
 
 1. Adding images to popups.
-1. Support for drawing polylines.
 1. Provide a tool for importing GeoJSON-structured data into the field.
 
 == GitHub ==
@@ -52,6 +51,12 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 2. Settings for the Leaflet field.
 
 == Changelog ==
+
+= 1.2.0 =
+* More polished UI.
+* Added support for drawing polylines, polygons and rectangles.
+* Added OpenStreetMap Black and White as Map Provider option.
+* Fixed a bug where a popup couldn't be opened after it had been opened once.
 
 = 1.1.2 =
 * 4.3.9 Compatibility patch
@@ -75,6 +80,12 @@ This is not a standalone plugin, you need to have [Advanced Custom Fields](http:
 * Release
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+* More polished UI.
+* Added support for drawing polylines, polygons and rectangles.
+* Added OpenStreetMap Black and White as Map Provider option.
+* Fixed a bug where a popup couldn't be opened after it had been opened once.
 
 = 1.1.2 =
 * 4.3.9 Compatibility patch

@@ -1,12 +1,12 @@
 .leaflet-map
-    .tools
+    .leaflet-control-container
         .tool
             display inline-block
             width 26px
             height 26px
             border-radius 100%
             background white
-            box-shadow 0 0 7px rgba(0, 0, 0, 0.2)
+            box-shadow 0 1px 5px rgba(0,0,0,0.65)
             margin-right 10px
             color lightgray
             font-size 15px
@@ -16,11 +16,52 @@
             &.active
             &:hover
                 color #21759b
+                background-color #f4f4f4
+                cursor pointer
+            &:active
+                margin-bottom -2px
+                margin-top 12px
             &.red
                 &.active
                 &:hover
                     color #f00
             &.right
                 float right
+    .leaflet-draw
+        position absolute
+        left 36px
+        top 171px
+        opacity 0
+        transition opacity .2s ease-out
     #map
         cursor pointer
+    .leaflet-popup
+        .leaflet-popup-close-button
+            padding 8px 8px 0 0
+        .leaflet-popup-content-wrapper
+            background rgba(0, 0, 0, 0.5)
+            border-radius 4px
+            .leaflet-popup-content
+                margin 6px
+            textarea
+                border none
+                margin-bottom -4px
+                padding 11px
+        .leaflet-popup-tip
+            background rgba(0, 0, 0, 0.5)
+    .leaflet-draw-actions
+        a
+            background rgba(0, 0, 0, 0.5)
+            &:hover
+                background rgba(0, 0, 0, 0.75)
+.tool-drawtools-active
+    .leaflet-map
+        .leaflet-draw
+            opacity 1
+body
+    &:not(.leaflet-dragging)
+        .tool-marker-active
+            .leaflet-map
+                .leaflet-container
+                    &:hover
+                        cursor crosshair

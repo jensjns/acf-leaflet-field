@@ -3,7 +3,7 @@
     Plugin Name: Advanced Custom Fields: Leaflet Field
     Plugin URI: https://github.com/jensjns/acf-leaflet-field
     Description: Adds a Leaflet map-field to Advanced Custom Fields.
-    Version: 1.1.2
+    Version: 1.2.0
     Author: Jens Nilsson
     Author URI: http://jensnilsson.nu/
     License: GPLv2 or later
@@ -114,7 +114,7 @@ new acf_field_leaflet_field_plugin();
             // enqueue scripts
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.7.3', true );
-            wp_enqueue_script( 'leaflet-frontend', plugins_url( '/js/leaflet-frontend.js', __FILE__ ), array( 'jquery', 'leaflet' ), '1', true );
+            wp_enqueue_script( 'leaflet-frontend', plugins_url( '/js/leaflet-frontend.js', __FILE__ ), array( 'jquery', 'leaflet' ), '1.2.0', true );
             wp_localize_script( 'leaflet-frontend', 'leaflet_field', $field_obj );
             echo '<div id="' . $field_obj['id'] . '_map" class="leaflet-map" style="height:' . $field_obj['height'] . 'px;"></div>';
         }

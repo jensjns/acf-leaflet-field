@@ -1,5 +1,71 @@
-.leaflet-map .tools .tool{display:inline-block;width:26px;height:26px;border-radius:100%;background:#fff;box-shadow:0 0 7px rgba(0,0,0,0.20);margin-right:10px;color:#d3d3d3;font-size:15px;line-height:26px;text-align:center;cursor:pointer;}
-.leaflet-map .tools .tool.active,.leaflet-map .tools .tool:hover{color:#21759b}
-.leaflet-map .tools .tool.red.active,.leaflet-map .tools .tool.red:hover{color:#f00}
-.leaflet-map .tools .tool.right{float:right}
-.leaflet-map #map{cursor:pointer}
+.leaflet-map .leaflet-control-container .tool {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  border-radius: 100%;
+  background: #fff;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+  margin-right: 10px;
+  color: #d3d3d3;
+  font-size: 15px;
+  line-height: 26px;
+  text-align: center;
+  cursor: pointer;
+}
+.leaflet-map .leaflet-control-container .tool.active,
+.leaflet-map .leaflet-control-container .tool:hover {
+  color: #21759b;
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+.leaflet-map .leaflet-control-container .tool:active {
+  margin-bottom: -2px;
+  margin-top: 12px;
+}
+.leaflet-map .leaflet-control-container .tool.red.active,
+.leaflet-map .leaflet-control-container .tool.red:hover {
+  color: #f00;
+}
+.leaflet-map .leaflet-control-container .tool.right {
+  float: right;
+}
+.leaflet-map .leaflet-draw {
+  position: absolute;
+  left: 36px;
+  top: 171px;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+.leaflet-map #map {
+  cursor: pointer;
+}
+.leaflet-map .leaflet-popup .leaflet-popup-close-button {
+  padding: 8px 8px 0 0;
+}
+.leaflet-map .leaflet-popup .leaflet-popup-content-wrapper {
+  background: rgba(0,0,0,0.5);
+  border-radius: 4px;
+}
+.leaflet-map .leaflet-popup .leaflet-popup-content-wrapper .leaflet-popup-content {
+  margin: 6px;
+}
+.leaflet-map .leaflet-popup .leaflet-popup-content-wrapper textarea {
+  border: none;
+  margin-bottom: -4px;
+  padding: 11px;
+}
+.leaflet-map .leaflet-popup .leaflet-popup-tip {
+  background: rgba(0,0,0,0.5);
+}
+.leaflet-map .leaflet-draw-actions a {
+  background: rgba(0,0,0,0.5);
+}
+.leaflet-map .leaflet-draw-actions a:hover {
+  background: rgba(0,0,0,0.75);
+}
+.tool-drawtools-active .leaflet-map .leaflet-draw {
+  opacity: 1;
+}
+body:not(.leaflet-dragging) .tool-marker-active .leaflet-map .leaflet-container:hover {
+  cursor: crosshair;
+}

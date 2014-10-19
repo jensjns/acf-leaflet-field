@@ -15,6 +15,12 @@ class acf_field_leaflet_field extends acf_field
             'nicename'      => 'OpenStreetMap',
             'attribution'   => 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
         ),
+        'openstreetmap_blackandwhite' => array(
+            'url'           => 'http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png',
+            'requires_key'  => false,
+            'nicename'      => 'OpenStreetMap Black and White',
+            'attribution'   => '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+        ),
         'cloudmade'     => array(
             'url'           => "http://{s}.tile.cloudmade.com/{api_key}/997/256/{z}/{x}/{y}.png",
             'requires_key'  => true,
@@ -45,7 +51,7 @@ class acf_field_leaflet_field extends acf_field
             'lat'           => '55.606',
             'lng'           => '13.002',
             'zoom_level'    => 13,
-            'height'        => 350,
+            'height'        => 400,
             'api_key'       => '',
             'map_provider'  => 'openstreetmap',
         );
@@ -59,7 +65,7 @@ class acf_field_leaflet_field extends acf_field
         $this->settings = array(
             'path' => apply_filters( 'acf/helpers/get_path', __FILE__ ),
             'dir' => apply_filters( 'acf/helpers/get_dir', __FILE__ ),
-            'version' => '1.1.2'
+            'version' => '1.2.0'
         );
 
         add_action( 'acf/field_group/admin_head', array( $this, 'conditional_options' ) );
@@ -94,16 +100,19 @@ class acf_field_leaflet_field extends acf_field
 
         //error_log(print_r($field, true));
 
+        $providers = array();
+
+        foreach( acf_field_leaflet_field::$map_providers as $key => $value ) {
+            $providers[$key] = $value['nicename'];
+        }
+
         acf_render_field_setting( $field, array(
             'label'         => __('Map Provider', 'acf-leaflet-field'),
             'instructions'  => __('Select map provider', 'acf-leaflet-field'),
             'type'          => 'radio',
             'name'          => 'map_provider',
             'layout'        => 'horizontal',
-            'choices'       => array(
-                'openstreetmap' => acf_field_leaflet_field::$map_providers['openstreetmap']['nicename'],
-                'cloudmade'     => acf_field_leaflet_field::$map_providers['cloudmade']['nicename']
-            )
+            'choices'       => $providers
         ));
 
         acf_render_field_setting( $field, array(
@@ -237,17 +246,9 @@ class acf_field_leaflet_field extends acf_field
 
         // render the field container,
         ?>
-            <div id="leaflet_field-wrapper_<?php echo $uid; ?>">
+            <div id="leaflet_field-wrapper_<?php echo $uid; ?>" class="tool-marker-active">
                 <input type="hidden" value='<?php echo $field['value']; ?>' id="field_<?php echo $uid; ?>" name="<?php echo $field['name']; ?>" data-zoom-level="<?php echo $field['zoom_level']; ?>" data-lat="<?php echo $field['lat']; ?>" data-lng="<?php echo $field['lng']; ?>" />
                 <div class="leaflet-map" data-uid="<?php echo $uid; ?>" data-tile-layer="<?php echo $tile_layer; ?>" data-attribution='<?php echo $attribution; ?>'>
-                    <ul class="tools">
-                        <li class="tool tool-compass icon-compass"></li>
-                        <li class="tool tool-marker icon-location active"></li>
-                        <li class="tool tool-tag icon-comment-alt2-fill"></li>
-                        <!--<li class="tool tool-path icon-share"></li>-->
-                        <li class="tool tool-remove icon-cancel-circle red"></li>
-                        <!--<li class="tool tool-reset icon-reload right red"></li>-->
-                    </ul>
                     <div id="map_<?php echo $uid; ?>" style="height:<?php echo $field['height']; ?>px;"></div>
                 </div>
             </div>
@@ -273,14 +274,16 @@ class acf_field_leaflet_field extends acf_field
 
         // styles
         wp_enqueue_style( 'leaflet', plugins_url( '/js/leaflet/leaflet.css', __FILE__ ), array(), '0.7.3', 'all' );
-
+        wp_enqueue_style( 'leaflet.draw', plugins_url( '/js/Leaflet.draw/dist/leaflet.draw.css', __FILE__ ), array(), 'ccca4b11ba4ff545433bf70f610b215053a2615e', 'all' );
         wp_enqueue_style( 'icomoon', plugins_url( '/css/icomoon/style.css', __FILE__ ), array(), '1.0.0', 'all' );
         wp_enqueue_style( 'leaflet-field', plugins_url( '/css/input.css', __FILE__ ), array( 'leaflet', 'icomoon' ), '1', 'all' );
 
         // scripts
         wp_enqueue_script( 'jquery' );
         wp_register_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.7.3', true );
+        wp_register_script( 'leaflet.draw', plugins_url( '/js/Leaflet.draw/dist/leaflet.draw.js', __FILE__ ), array( 'leaflet' ), 'ccca4b11ba4ff545433bf70f610b215053a2615e', true );
         wp_enqueue_script( 'leaflet' );
+        wp_enqueue_script( 'leaflet.draw' );
 
 
     }

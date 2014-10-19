@@ -59,6 +59,12 @@ jQuery(document).ready(function($) {
                     }
                 }).addTo(map);
             });
+
+            L.geoJson(map_settings.drawnItems, {
+                onEachFeature: function(feature, layer) {
+                    layer.options.color = "#000000";
+                }
+            }).addTo(map);
         }
     }
 
