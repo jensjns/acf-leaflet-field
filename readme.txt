@@ -14,8 +14,10 @@ Addon for Advanced Custom Fields that adds a Leaflet field to the available fiel
 This plugin adds a [Leaflet](http://leafletjs.com) map field to the [Advanced Custom Fields](http://www.advancedcustomfields.com/) plugin. Use it to display beutiful maps with markers along with your posts and pages.
 
 * Add multiple markers with popups to the map.
+* Draw polylines, polygons and rectangles.
 * The field stores both your zoom-level and viewport location.
 * Function to render the map in your theme is included in the plugin: `<?php the_leaflet_field( 'my_leaflet_field' ); ?>`, just plug and play!
+* Supports ACF3, ACF4 and ACF5 (Pro)
 
 == Installation ==
 
