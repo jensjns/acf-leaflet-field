@@ -316,8 +316,8 @@ class acf_field_leaflet_field extends acf_field
 
         // scripts
         wp_enqueue_script( 'jquery' );
-        wp_register_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.7.3', true );
-        wp_register_script( 'leaflet.draw', plugins_url( '/js/Leaflet.draw/dist/leaflet.draw.js', __FILE__ ), array( 'leaflet' ), 'ccca4b11ba4ff545433bf70f610b215053a2615e', true );
+        wp_register_script( 'leaflet', plugins_url( '/js/leaflet/leaflet.js', __FILE__ ), array(), '0.7.3', false );
+        wp_register_script( 'leaflet.draw', plugins_url( '/js/Leaflet.draw/dist/leaflet.draw.js', __FILE__ ), array( 'leaflet' ), 'ccca4b11ba4ff545433bf70f610b215053a2615e', false );
         wp_enqueue_script( 'leaflet' );
         wp_enqueue_script( 'leaflet.draw' );
     }
