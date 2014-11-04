@@ -65,7 +65,7 @@ class acf_field_leaflet_field extends acf_field
         $this->settings = array(
             'path' => apply_filters( 'acf/helpers/get_path', __FILE__ ),
             'dir' => apply_filters( 'acf/helpers/get_dir', __FILE__ ),
-            'version' => '1.2.0'
+            'version' => '1.2.1'
         );
 
         add_action( 'acf/field_group/admin_head', array( $this, 'conditional_options' ) );

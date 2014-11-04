@@ -139,7 +139,8 @@
             window.maps[uid].addControl(drawControl);
 
             // render existing markers if we have any
-            if( Object.keys(window.map_settings[uid].markers).length > 0 ) {
+            console.log(window.map_settings[uid]);
+            if( Object.keys(window.map_settings[uid].markers).length > 0 || (window.map_settings[uid].drawnItems && window.map_settings[uid].drawnItems.features.length > 0) ) {
                 var newMarkers = {};
                 $.each(window.map_settings[uid].markers, function(index, marker) {
                     //var newMarker = L.marker(marker.geometry.coordinates, {draggable: true});

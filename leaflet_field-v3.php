@@ -63,7 +63,7 @@ class acf_field_leaflet_field extends acf_Field
         $this->settings = array(
             'path' => $this->helpers_get_path( __FILE__ ),
             'dir' => $this->helpers_get_dir( __FILE__ ),
-            'version' => '1.2.0'
+            'version' => '1.2.1'
         );
 
     }

@@ -49,7 +49,7 @@ jQuery(document).ready(function($) {
             maxZoom: 18
         }).addTo(map);
 
-        if( Object.keys(map_settings.markers).length > 0 ) {
+        if( Object.keys(map_settings.markers).length > 0 || (window.map_settings.drawnItems && window.map_settings.drawnItems.features.length > 0) ) {
             $.each(map_settings.markers, function(index, marker) {
                 L.geoJson(marker, {
                     onEachFeature:function(feature, layer){
