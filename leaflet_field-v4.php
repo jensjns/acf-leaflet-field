@@ -92,8 +92,8 @@ class acf_field_leaflet_field extends acf_field
 
         $providers = array();
 
-        foreach( acf_field_leaflet_field::$map_providers as $key => $value ) {
-            $providers[$key] = $value['nicename'];
+        foreach( acf_field_leaflet_field::$map_providers as $provider_key => $value ) {
+            $providers[$provider_key] = $value['nicename'];
         }
 
         // Create Field Options HTML
@@ -227,9 +227,9 @@ class acf_field_leaflet_field extends acf_field
                 <?php
                     // iterate map providers and check if they require an api-key
                     $conditions = '';
-                    foreach( acf_field_leaflet_field::$map_providers as $key => $map_provider )
+                    foreach( acf_field_leaflet_field::$map_providers as $provider_key => $map_provider )
                     {
-                        $conditions .= 'if( value == "' . $key . '" ) { $(this).parents(".leaflet_field_map_provider_field").siblings(".leaflet_field_api_key_field").';
+                        $conditions .= 'if( value == "' . $provider_key . '" ) { $(this).parents(".leaflet_field_map_provider_field").siblings(".leaflet_field_api_key_field").';
 
                         if( $map_provider['requires_key'] )
                         {
