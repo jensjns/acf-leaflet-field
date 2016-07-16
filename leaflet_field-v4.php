@@ -92,7 +92,7 @@ class acf_field_leaflet_field extends acf_field
 
         $providers = array();
 
-        foreach( acf_field_leaflet_field::$map_providers as $key => $value ) {
+        foreach( acf_field_leaflet_field::$map_providers as $providerKey => $value ) {
             $providers[$key] = $value['nicename'];
         }
 
